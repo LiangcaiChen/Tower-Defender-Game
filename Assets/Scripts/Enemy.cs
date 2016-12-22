@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour {
 		if(other.tag == "CheckPoint") {
 			target += 1;
 		} else if (other.tag == "Finish") {
-			GameManager.instance.removeEnemyFromScreen();
+			GameManager.Instance.removeEnemyFromScreen();
 			Destroy(gameObject);
 		}
 	}
