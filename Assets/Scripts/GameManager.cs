@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager> {
 	private int maxEnemiesOnScreen;
 	[SerializeField]
 	private int totalEnemies;
-	[SerializeField]G
+	[SerializeField]
 	private int enemiesPerSpawn;
 
 	private int enemiesOnScreen = 0;
