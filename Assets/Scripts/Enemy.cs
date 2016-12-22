@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
-	
 	[SerializeField]
 	private Transform exitPoint;
 	[SerializeField]
