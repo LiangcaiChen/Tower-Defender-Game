@@ -56,7 +56,10 @@ public class Enemy : MonoBehaviour {
 		if(other.tag == "CheckPoint") {
 			target += 1;
 		} else if (other.tag == "Finish") {
+			GameManager.Instance.RoundEscaped += 1;
+			GameManager.Instance.TotalEscaped += 1;
 			GameManager.Instance.UnregisterEnemy(this);
+			GameManager.Instance.IsWaveOver();
 		} else if (other.tag == "Projectile") {
 			Projectile newP = other.gameObject.GetComponent<Projectile>();
 			enemyHit(newP.AttackStrength);
@@ -81,6 +84,9 @@ public class Enemy : MonoBehaviour {
 	public void enemyDie() {
 		isDead = true;
 		enemyCollider.enabled = false;
+		GameManager.Instance.TotalKilled += 1;
+		GameManager.Instance.AddMoney(rewardAmount);
+		GameManager.Instance.IsWaveOver();
 	}
 	
 }

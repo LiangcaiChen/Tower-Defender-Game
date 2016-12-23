@@ -21,9 +21,7 @@ public class GameManager : Singleton<GameManager> {
 	[SerializeField]
 	private GameObject[] enemies;
 	[SerializeField]
-	private int maxEnemiesOnScreen;
-	[SerializeField]
-	private int totalEnemies;
+	private int totalEnemies = 3;
 	[SerializeField]
 	private int enemiesPerSpawn;
 	[SerializeField]
@@ -38,6 +36,36 @@ public class GameManager : Singleton<GameManager> {
 	private int totalKilled = 0;
 	private int whichEnemiesToSpawn = 0;
 	private gameStatus currentState = gameStatus.PLAY;
+
+	public int TotalEscaped {
+		get {
+			return totalEscaped;
+		}
+
+		set {
+			totalEscaped = value;
+		}
+	}
+
+	public int RoundEscaped {
+		get {
+			return roundEscaped;
+		}
+
+		set {
+			roundEscaped = value;
+		}
+	}
+
+	public int TotalKilled {
+		get {
+			return totalKilled;
+		}
+
+		set {
+			totalKilled = value;
+		}
+	}
 
 	public List<Enemy> EnemyList = new List<Enemy>();
 
@@ -67,8 +95,8 @@ public class GameManager : Singleton<GameManager> {
 	IEnumerator spawn() {
 		if(enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies) {
 			for(int i = 0; i < enemiesPerSpawn; i++) {
-				if(EnemyList.Count < maxEnemiesOnScreen) {
-					GameObject newEnemy = Instantiate(enemies[1]) as GameObject;
+				if(EnemyList.Count < totalEnemies) {
+					GameObject newEnemy = Instantiate(enemies[0]) as GameObject;
 					newEnemy.transform.position = spawnPoint.transform.position;
 					
 				}
@@ -102,6 +130,15 @@ public class GameManager : Singleton<GameManager> {
 		TotalMoney -= amount;
 	}
 
+	public void IsWaveOver() {
+		totalEscapeLbl.text = "Escape " + totalEscaped + "/10";
+		// if wave is over
+		if((RoundEscaped + totalKilled) == totalEnemies) {
+			SetCurrentGameState();
+			ShowMenu();
+		}
+	}
+
 	public void ShowMenu() {
 		switch (currentState) {
 			case gameStatus.GAMEOVER : playBtnLbl.text = "Play Again"; break;
@@ -111,6 +148,43 @@ public class GameManager : Singleton<GameManager> {
 		}
 
 		playBtn.gameObject.SetActive(true);
+	}
+
+	public void PlayBtnPressed() {
+		Debug.Log("Pressed Play Btn");
+
+		switch (currentState) {
+			case gameStatus.NEXT: 
+			waveNumber += 1; 
+			totalEnemies += waveNumber; 
+			break;
+
+			default : 
+			totalEnemies = 3; 
+			totalEscaped = 0; 
+			totalMoney = 10;
+			totalMoneyLbl.text = totalMoney.ToString();
+			totalEscapeLbl.text = "Escaped " + totalEscaped + "/10";
+			break;
+		}
+		DestroyAllEnemies();
+		totalKilled = 0;
+		roundEscaped = 0;
+		currentWaveLbl.text = "Wave " + (waveNumber + 1);
+		StartCoroutine(spawn());
+		playBtn.gameObject.SetActive(false);
+	}
+
+	public void SetCurrentGameState() {
+		if(totalEscaped >= 10) {
+			currentState = gameStatus.GAMEOVER;
+		} else if (waveNumber == 0 && (totalKilled + roundEscaped) == 0) {
+			currentState = gameStatus.PLAY;
+		} else if (waveNumber >= totalWaves) {
+			currentState = gameStatus.WIN;
+		} else {
+			currentState = gameStatus.NEXT;
+		}
 	}
 
 	private void handleEscape() {
