@@ -60,6 +60,10 @@ public class GameManager : Singleton<GameManager> {
 		ShowMenu();
 	}
 
+	void Update() {
+		handleEscape();
+	}
+
 	IEnumerator spawn() {
 		if(enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies) {
 			for(int i = 0; i < enemiesPerSpawn; i++) {
@@ -109,4 +113,10 @@ public class GameManager : Singleton<GameManager> {
 		playBtn.gameObject.SetActive(true);
 	}
 
+	private void handleEscape() {
+		if(Input.GetKeyDown(KeyCode.Escape)) {
+			TowerManager.Instance.disableDragSprite();
+			TowerManager.Instance.towerBtnPressed = null;
+		}
+	}
 }

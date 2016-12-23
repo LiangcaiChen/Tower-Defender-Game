@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class TowerManager : Singleton<TowerManager> {
 	
-	private TowerBtn towerBtnPressed;
+	public  TowerBtn towerBtnPressed{get; set;}
 
 	private SpriteRenderer spriteRenderer;
 
@@ -36,6 +36,7 @@ public class TowerManager : Singleton<TowerManager> {
 			GameObject newTower = Instantiate(towerBtnPressed.TowerObject);
 			newTower.transform.position = hit.transform.position;
 			disableDragSprite();
+			TowerManager.Instance.towerBtnPressed = null;
 		}
 	}
 
