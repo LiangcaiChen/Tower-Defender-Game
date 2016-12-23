@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+
 public enum gameStatus {
 	NEXT, PLAY, GAMEOVER, WIN
 }
@@ -37,6 +38,7 @@ public class GameManager : Singleton<GameManager> {
 	private int whichEnemiesToSpawn = 0;
 	private gameStatus currentState = gameStatus.PLAY;
 	private AudioSource audioSource;
+	private int enemiesToSpawn = 0;
 
 	public AudioSource AudioSource {
 		get {
@@ -104,7 +106,7 @@ public class GameManager : Singleton<GameManager> {
 		if(enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies) {
 			for(int i = 0; i < enemiesPerSpawn; i++) {
 				if(EnemyList.Count < totalEnemies) {
-					GameObject newEnemy = Instantiate(enemies[0]) as GameObject;
+					GameObject newEnemy = Instantiate(enemies[Random.Range(0,2)]) as GameObject;
 					newEnemy.transform.position = spawnPoint.transform.position;
 					
 				}
@@ -175,6 +177,7 @@ public class GameManager : Singleton<GameManager> {
 			totalEnemies = 3; 
 			totalEscaped = 0; 
 			totalMoney = 10;
+			enemiesToSpawn = 0;
 			TowerManager.Instance.DestroyAllTowers();
 			TowerManager.Instance.RenameTagsBuildSites();
 			totalMoneyLbl.text = totalMoney.ToString();

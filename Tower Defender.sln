@@ -1,5 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
 Project("{797AEAA8-F9C3-C5A8-4156-B69A55EC9D37}") = "Tower Defender", "Assembly-CSharp.csproj", "{DEA5A709-760B-C871-C6A4-D4FCA44C2A30}"
 EndProject
 Global
@@ -12,6 +13,9 @@ Global
 		{DEA5A709-760B-C871-C6A4-D4FCA44C2A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA5A709-760B-C871-C6A4-D4FCA44C2A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEA5A709-760B-C871-C6A4-D4FCA44C2A30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
