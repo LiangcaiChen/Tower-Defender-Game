@@ -24,7 +24,7 @@ public class Tower : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		attackCounter -= Time.deltaTime;
-		if(targetEnemy == null) {
+		if(targetEnemy == null || targetEnemy.IsDead) {
 			Enemy nearestEnemy = GetNearestEnemyInRanger();
 			if(nearestEnemy != null && Vector2.Distance(transform.localPosition, GetNearestEnemyInRanger().transform.localPosition) <= attackRadius) {
 				targetEnemy = nearestEnemy;
@@ -79,9 +79,9 @@ public class Tower : MonoBehaviour {
 	private float getTargetDistance(Enemy i_enemy) {
 		if(i_enemy == null) {
 			i_enemy = GetNearestEnemyInRanger();
-			// if(i_enemy == null) {
-			// 	return 0f;
-			// }
+			if(i_enemy == null) {
+				return 0f;
+			}
 		}
 		return Mathf.Abs(Vector2.Distance(transform.localPosition, i_enemy.transform.localPosition));
 	}

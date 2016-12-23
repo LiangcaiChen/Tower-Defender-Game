@@ -1,8 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+
+public enum gameStatus {
+	NEXT, PLAY, GAMEOVER, WIN
+}
 
 public class GameManager : Singleton<GameManager> {
+	[SerializeField]
+	private int totalWaves = 10;
+	[SerializeField]
+	private Text totalMoneyLbl;
+	[SerializeField]
+	private Text currentWaveLbl;
+	[SerializeField]
+	private Text totalEscapeLbl;
 	[SerializeField]
 	private GameObject spawnPoint;
 	[SerializeField]
@@ -13,14 +26,38 @@ public class GameManager : Singleton<GameManager> {
 	private int totalEnemies;
 	[SerializeField]
 	private int enemiesPerSpawn;
+	[SerializeField]
+	private Text playBtnLbl;
+	[SerializeField]
+	private Button playBtn;
+
+	private int waveNumber = 0;
+	private int totalMoney = 10;
+	private int totalEscaped = 0;
+	private int roundEscaped = 0;
+	private int totalKilled = 0;
+	private int whichEnemiesToSpawn = 0;
+	private gameStatus currentState = gameStatus.PLAY;
 
 	public List<Enemy> EnemyList = new List<Enemy>();
 
 	const float spawnDelay = 0.5f;
 
+	public int TotalMoney {
+		get {
+			return totalMoney;
+		}
+
+		set {
+			totalMoney = value;
+			totalMoneyLbl.text = totalMoney.ToString();
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
-		StartCoroutine(spawn());
+		playBtn.gameObject.SetActive(false);
+		ShowMenu();
 	}
 
 	IEnumerator spawn() {
@@ -51,6 +88,25 @@ public class GameManager : Singleton<GameManager> {
 			Destroy(enemy.gameObject);
 		}
 		EnemyList.Clear();
+	}
+
+	public void AddMoney(int amount) {
+		TotalMoney += amount;
+	}
+
+	public void SubstractMoney(int amount) {
+		TotalMoney -= amount;
+	}
+
+	public void ShowMenu() {
+		switch (currentState) {
+			case gameStatus.GAMEOVER : playBtnLbl.text = "Play Again"; break;
+			case gameStatus.NEXT : playBtnLbl.text = "Next Wave"; break;
+			case gameStatus.PLAY : playBtnLbl.text = "Play"; break;
+			case gameStatus.WIN : playBtnLbl.text = "Play"; break;
+		}
+
+		playBtn.gameObject.SetActive(true);
 	}
 
 }

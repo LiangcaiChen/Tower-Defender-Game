@@ -9,19 +9,36 @@ public class Enemy : MonoBehaviour {
 	[SerializeField]
 	private float navigationUpdate;
 
+	[SerializeField]
+	private int healthPoints;
+
+	[SerializeField]
+	private int rewardAmount;
+
 	private int target = 0;
 	private Transform enemy;
+	private Collider2D enemyCollider;
+	private Animator animation;
 	private float navigationTime = 0;
+	private bool isDead = false;
+
+	public bool IsDead {
+		get {
+			return isDead;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
 		enemy = GetComponent<Transform> ();
+		enemyCollider = GetComponent<Collider2D>();
+		animation = GetComponent<Animator>();
 		GameManager.Instance.RegisterEnemy(this);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(waypoints != null) {
+		if(waypoints != null && !isDead) {
 			navigationTime += Time.deltaTime;
 			if(navigationTime > navigationUpdate) {
 				if(target < waypoints.Length) {
@@ -40,8 +57,30 @@ public class Enemy : MonoBehaviour {
 			target += 1;
 		} else if (other.tag == "Finish") {
 			GameManager.Instance.UnregisterEnemy(this);
+		} else if (other.tag == "Projectile") {
+			Projectile newP = other.gameObject.GetComponent<Projectile>();
+			enemyHit(newP.AttackStrength);
+			Destroy(other.gameObject);
 		}
 	}
 
+	public void enemyHit(int hitPoint) {
+		if(healthPoints - hitPoint > 0) {
+			healthPoints -= hitPoint;
+			// call hurt animation
+			animation.Play("Hurt");
+
+		} else {
+			// die animation
+			animation.SetTrigger("didDie");
+
+			enemyDie();
+		}
+	}
+
+	public void enemyDie() {
+		isDead = true;
+		enemyCollider.enabled = false;
+	}
 	
 }

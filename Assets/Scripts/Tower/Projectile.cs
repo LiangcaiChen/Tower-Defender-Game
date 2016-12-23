@@ -7,14 +7,14 @@ public enum projecttileType {
 public class Projectile : MonoBehaviour {
 
 	[SerializeField]
-	private int attactStrength;
+	private int attackStrength;
 
 	[SerializeField]
 	private projecttileType pT;
 
-	public int AttactStrength {
+	public int AttackStrength {
 		get {
-			return attactStrength;
+			return attackStrength;
 		}
 	}
 	
