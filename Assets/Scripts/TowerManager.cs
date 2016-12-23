@@ -5,9 +5,11 @@ public class TowerManager : Singleton<TowerManager> {
 	
 	private TowerBtn towerBtnPressed;
 
+	private SpriteRenderer spriteRenderer;
+
 	// Use this for initialization
 	void Start () {
-	
+		spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -21,8 +23,11 @@ public class TowerManager : Singleton<TowerManager> {
 				hit.collider.tag = "BuildSiteFull";
 				placeTower(hit);
 			}
-
+		
 		}
+		if(spriteRenderer.enabled) {
+				followMouse();
+			}
 
 	}
 
@@ -30,11 +35,27 @@ public class TowerManager : Singleton<TowerManager> {
 		if(!EventSystem.current.IsPointerOverGameObject() && towerBtnPressed != null) {
 			GameObject newTower = Instantiate(towerBtnPressed.TowerObject);
 			newTower.transform.position = hit.transform.position;
+			disableDragSprite();
 		}
 	}
 
 	public void selectedTower(TowerBtn towerSelected) {
 		towerBtnPressed = towerSelected;
-		
+		enableDragSprite(towerBtnPressed.DragSprite);
+	}
+
+	public void followMouse() {
+		transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		transform.position = new Vector2(transform.position.x, transform.position.y);
+	}
+
+	public void enableDragSprite(Sprite sprite) {
+		spriteRenderer.enabled = true;
+		spriteRenderer.sprite = sprite;
+	}
+
+	public void disableDragSprite() {
+		spriteRenderer.enabled = false;
+
 	}
 }
