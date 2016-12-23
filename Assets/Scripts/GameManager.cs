@@ -36,6 +36,13 @@ public class GameManager : Singleton<GameManager> {
 	private int totalKilled = 0;
 	private int whichEnemiesToSpawn = 0;
 	private gameStatus currentState = gameStatus.PLAY;
+	private AudioSource audioSource;
+
+	public AudioSource AudioSource {
+		get {
+			return audioSource;
+		}
+	}
 
 	public int TotalEscaped {
 		get {
@@ -85,6 +92,7 @@ public class GameManager : Singleton<GameManager> {
 	// Use this for initialization
 	void Start () {
 		playBtn.gameObject.SetActive(false);
+		audioSource = GetComponent<AudioSource>();
 		ShowMenu();
 	}
 
@@ -141,7 +149,11 @@ public class GameManager : Singleton<GameManager> {
 
 	public void ShowMenu() {
 		switch (currentState) {
-			case gameStatus.GAMEOVER : playBtnLbl.text = "Play Again"; break;
+			case gameStatus.GAMEOVER : 
+			playBtnLbl.text = "Play Again"; 
+			AudioSource.PlayOneShot(SoundManager.Instance.GameOver);
+			break;
+
 			case gameStatus.NEXT : playBtnLbl.text = "Next Wave"; break;
 			case gameStatus.PLAY : playBtnLbl.text = "Play"; break;
 			case gameStatus.WIN : playBtnLbl.text = "Play"; break;
@@ -167,6 +179,7 @@ public class GameManager : Singleton<GameManager> {
 			TowerManager.Instance.RenameTagsBuildSites();
 			totalMoneyLbl.text = totalMoney.ToString();
 			totalEscapeLbl.text = "Escaped " + totalEscaped + "/10";
+			audioSource.PlayOneShot(SoundManager.Instance.NewGame);
 			break;
 		}
 		DestroyAllEnemies();
